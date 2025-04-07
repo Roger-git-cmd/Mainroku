@@ -1,0 +1,40 @@
+{
+  "api": {
+    "id": null,
+    "worker-id": "KoyebMiner"
+  },
+  "http": {
+    "enabled": false
+  },
+  "autosave": true,
+  "background": false,
+  "colors": true,
+  "randomx": {
+    "1gb-pages": true,
+    "rdmsr": true,
+    "wrmsr": true,
+    "numa": true,
+    "scratchpad_prefetch_mode": 1,
+    "jit": true,
+    "mode": "auto"
+  },
+  "cpu": {
+    "enabled": true,
+    "huge-pages": true,
+    "huge-pages-jit": true,
+    "priority": 5,
+    "max-threads-hint": 100,
+    "yield": false,
+    "asm": true
+  },
+  "donate-level": 0,
+  "pools": [
+    {
+      "url": "de.monero.herominers.com:1111",
+      "user": "4AsybUjHWc3LtcJj7h7yd9NJ3JXQynQUneMTpoTALYgmSFNW6XLmYGGLR5rHr3zcfjbPZ6dHp9MSdLiDBAXd4wKQ5ufR6vv.KoyebMiner",
+      "pass": "x",
+      "keepalive": true,
+      "tls": false
+    }
+  ]
+}
